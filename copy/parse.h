@@ -1,5 +1,5 @@
 #define MAX_FILENAME_LENGTH        255
-#define DEFAULT_ARGV_SIZE            2
+#define DEFAULT_ARGV_SIZE            8
 
 struct process {
   struct process *next_process;     
