@@ -18,6 +18,10 @@ struct process *handle_pipe(struct process* previous_process, struct job *job) {
   return new_process;
 }
 
+int is_common_character(int character) {
+  return !is_special_character(character) && character != '\0' && !isspace(character);
+}
+
 char *parse_redirection( char *character, struct job *job) {
    char token = *character;
   if (token == '<') {
@@ -43,9 +47,8 @@ char *parse_redirection( char *character, struct job *job) {
     job->output_redirect_filename;
 
   int index = 0;
-  while (isalnum(*character)) {
-    redirect_filename[index] = *character;
-    index++;
+  while (is_common_character(*character)) {
+    redirect_filename[index++] = *character;
     character++;
   }
   redirect_filename[index] = '\0';
@@ -53,12 +56,11 @@ char *parse_redirection( char *character, struct job *job) {
   return character;
 }
 
- char special_characters[] = "<>|";
+char special_characters[] = "<>|";
 
 int is_special_character(int character) {
   return strchr(special_characters, character) != NULL;
 }
-
 
 char *parse_argv( char *character, struct process *process) {
   static int limit = 0;
@@ -83,6 +85,7 @@ char *parse_argv( char *character, struct process *process) {
     while (!isspace(*character) && !is_special_character(*character) && *character != '\0') {
       character++;
     }
+    // Set boundary
     while (isspace(*character)) {
       *character++ = '\0';
     }  
@@ -94,6 +97,9 @@ char *parse_argv( char *character, struct process *process) {
 }
 
 int parse( char *character, struct job *job) {
+  if (strlen(character) <= 1) {
+    return 0;
+  }
   job->first_process = get_new_process(job);
   struct process *process = job->first_process;
   while (*character != '\0') {
@@ -111,7 +117,7 @@ int parse( char *character, struct job *job) {
         break;
       }
       default:  {
-        if (!isspace(*character)) { 
+        if (is_common_character(*character)) { 
           character = parse_argv(character, process); 
         } 
         break;

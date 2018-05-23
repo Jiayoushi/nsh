@@ -17,9 +17,7 @@ void print_parse_result(struct job *job) {
   printf("%d: ", job->total_process);
   if (job->input_redirect_mode == 1) {
     printf("<");
-  }
-  
-   else if (job->input_redirect_mode == 2) {
+  } else if (job->input_redirect_mode == 2) {
     printf("<<");
   }
   if (job->input_redirect_mode != 0) {
@@ -31,8 +29,10 @@ void print_parse_result(struct job *job) {
     if (process != job->first_process) { 
       printf("| ");
     }
+
     int index = 0;
-    for ( ; process->argv[index] != NULL; index++) {
+    // process->argv may be NULL
+    for ( ; process->argv != NULL && process->argv[index] != NULL; index++) {
       printf("'%s' ", process->argv[index]);
     }
   }
@@ -62,6 +62,7 @@ int main() {
   while (TRUE) {
     print_prompt();
     char buffer[COMMAND_LENGTH_LIMIT];
+    // puts it here to ensure prompt is printed before read input
     if (fgets(buffer, COMMAND_LENGTH_LIMIT, stdin) == NULL) {
       break;  
     }

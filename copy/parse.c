@@ -1,30 +1,3 @@
-/*
-A parser's job is to break up the line into its ituent logical parts. That means it needs to figure out if
-there is any 
-
-1. input/output redirection (the < and > characters), 
-2. how many pipes there are on the command line (which is one less than the number of commands between pipes---eg., “who | wc” is two commands separated by one pipe), and
-3. what the command line arguments are to each command. 
-
-1. You should create a struct which will hold a full command
-line with all this information, and put its definition into a file called parse.h. 
-2. The file parse.h also contains a prototype
-for the function Parse, which will be defined in the file parse.c. 
-
-Then create parse.c, which contains the code for the
-actual parser. 
-
-The file main.c will contain a loop which (for now) just reads a line, pasess that line to the function
-Parse. Parse will populate the struct with the logical info on the command line, and then your main program will
-print out the parsed version of the command line. For example, given “cat –v <infile | grep foo | wc > outfile”, the Part
-1 version of your main program should print:
- 3: <’infile’ ‘cat’ ‘-v’ | ‘grep’ ‘foo’ | ‘wc’ > ‘outfile’  
- The ‘3’ represents the number of commands, and each “word” is printed with quotes around it. Input/output redirection
- should only be printed if they are present. So for example “who | wc” should give:
-  2: ‘who’ | ‘wc’
-  A correct executable of the parser is in ~wayne/pub/cs146/nsh-parser. You can use it to see what yours should output
-  for Part 1 of the assignment. */
-
 #include "parse.h"
 
 #include <stdio.h>
@@ -43,6 +16,10 @@ struct process *handle_pipe(struct process* previous_process, struct job *job) {
   struct process *new_process = get_new_process(job);
   previous_process->next_process = new_process;
   return new_process;
+}
+
+int is_common_character(int character) {
+  return !is_special_character(character) && character != '\0' && !isspace(character);
 }
 
 char *parse_redirection( char *character, struct job *job) {
@@ -70,9 +47,8 @@ char *parse_redirection( char *character, struct job *job) {
     job->output_redirect_filename;
 
   int index = 0;
-  while (isalnum(*character)) {
-    redirect_filename[index] = *character;
-    index++;
+  while (is_common_character(*character)) {
+    redirect_filename[index++] = *character;
     character++;
   }
   redirect_filename[index] = '\0';
@@ -80,24 +56,36 @@ char *parse_redirection( char *character, struct job *job) {
   return character;
 }
 
- char special_characters[] = "<>|";
+char special_characters[] = "<>|";
 
 int is_special_character(int character) {
   return strchr(special_characters, character) != NULL;
 }
 
-
 char *parse_argv( char *character, struct process *process) {
-  process->argv = (char **)malloc(sizeof(char *) * DEFAULT_ARGV_SIZE);
-  
+  static int limit = 0;
   int index = 0;
+  if (process->argv == NULL) {
+    process->argv = (char **)malloc(sizeof(char *) * DEFAULT_ARGV_SIZE);
+    limit = DEFAULT_ARGV_SIZE;
+  } else {
+    while (process->argv[index] != NULL) {
+      index++;
+    }
+  }  
   for ( ; !is_special_character(*character) && character != '\0'; index++) {
-    process->argv[index] = (char *)character; 
+    // Resize
+    // limit - 1 to reserve the last pointer for NULL
+    if (index == limit - 1) {
+      process->argv = (char **)realloc(process->argv, sizeof(char *) * limit * 2);
+      limit *= 2;
+    }    
 
+    process->argv[index] = (char *)character; 
     while (!isspace(*character) && !is_special_character(*character) && *character != '\0') {
       character++;
     }
-
+    // Set boundary
     while (isspace(*character)) {
       *character++ = '\0';
     }  
@@ -109,6 +97,9 @@ char *parse_argv( char *character, struct process *process) {
 }
 
 int parse( char *character, struct job *job) {
+  if (strlen(character) <= 1) {
+    return 0;
+  }
   job->first_process = get_new_process(job);
   struct process *process = job->first_process;
   while (*character != '\0') {
@@ -126,7 +117,7 @@ int parse( char *character, struct job *job) {
         break;
       }
       default:  {
-        if (!isspace(*character)) { 
+        if (is_common_character(*character)) { 
           character = parse_argv(character, process); 
         } 
         break;
