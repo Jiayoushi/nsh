@@ -98,8 +98,8 @@ char *parse_argv( char *character, struct process *process) {
 
 // All sub-parse functions should return the character
 // it has parsed
-int parse( char *character, struct job *job) {
-  if (strlen(character) <= 1) {
+int parse(char *character, struct job *job) {
+  if (strlen(character) <= 1 || *character == '#') {
     return 0;
   }
   job->first_process = get_new_process(job);

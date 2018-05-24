@@ -1,4 +1,5 @@
 Allow meta-characters to appear without spaces around them, so "who|wc" works, rather than needing spaces
 like "who | wc". (You don’t get the marks if you end up using my parser from Part 1, of course.)
 
-
+Comments. Anything after a '#' to the end-of-line is ignored. Note that this automatically allows you to
+begin your nsh scripts with "#!/home/you/bin/nsh", giving automatic execution of executable nsh scripts.

@@ -58,12 +58,22 @@ void cleanup(struct job *job) {
   }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+  FILE *command_source = stdin;
+  if (argc > 1) {
+    if ((command_source = fopen(argv[1], "r")) == NULL) {
+      perror(argv[1]);
+      exit(EXIT_FAILURE);
+    } 
+  }
+
   while (TRUE) {
-    print_prompt();
+    if (command_source == stdin) {
+      print_prompt();
+    }
     char buffer[COMMAND_LENGTH_LIMIT];
     // puts it here to ensure prompt is printed before read input
-    if (fgets(buffer, COMMAND_LENGTH_LIMIT, stdin) == NULL) {
+    if (fgets(buffer, COMMAND_LENGTH_LIMIT, command_source) == NULL) {
       break;  
     }
     struct job job = (const struct job){NULL};
