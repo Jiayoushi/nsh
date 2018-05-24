@@ -12,7 +12,7 @@ struct process *get_new_process(struct job *job) {
   return new_process;
 }
 
-struct process *handle_pipe(struct process* previous_process, struct job *job) {
+struct process *parse_pipe(struct process* previous_process, struct job *job) {
   struct process *new_process = get_new_process(job);
   previous_process->next_process = new_process;
   return new_process;
@@ -55,7 +55,7 @@ char *parse_redirection( char *character, const char token, struct job *job) {
   return character - 1;
 }
 
-char special_characters[] = "<>|";
+char special_characters[] = "<>|&";
 
 int is_special_character(int character) {
   return strchr(special_characters, character) != NULL;
@@ -96,10 +96,19 @@ char *parse_argv( char *character, struct process *process) {
   return character - 1;
 }
 
+void parse_background_job(struct job *job) {
+  job->background = TRUE;
+}
+
 // All sub-parse functions should return the character
 // it has parsed
 int parse(char *character, struct job *job) {
-  if (strlen(character) <= 1 || *character == '#') {
+  char *pound = strchr(character, '#');
+  if (pound != NULL) {
+    *pound = '\0';
+  }  
+
+  if (strlen(character) <= 1) {
     return 0;
   }
   job->first_process = get_new_process(job);
@@ -118,7 +127,12 @@ int parse(char *character, struct job *job) {
       }
       case '|': {
         *character = '\0';
-        process = handle_pipe(process, job);
+        process = parse_pipe(process, job);
+        break;
+      }
+      case '&': {
+        *character = '\0';
+        parse_background_job(job);
         break;
       }
       default:  {

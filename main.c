@@ -45,6 +45,8 @@ void print_parse_result(struct job *job) {
   if (job->output_redirect_mode != 0) {
     printf("'%s'", job->output_redirect_filename);
   }
+
+  printf("bg:%d", job->background);
   printf("\n");
 }
 
@@ -82,5 +84,6 @@ int main(int argc, char *argv[]) {
     cleanup(&job);
   }
 
+  fclose(command_source);
   return 0;
 }

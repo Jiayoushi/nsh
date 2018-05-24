@@ -1,0 +1,25 @@
+#!/bin/bash
+
+clear && clear
+
+make -s
+
+if [ $? -ne 0 ]; then make clean && exit 1; fi
+
+declare -a arr=(" ls # | wc -w"
+                " # ls ls # nice"
+                "ls | wc -w &"
+               )
+
+file="/tmp/ffffff"
+
+for i in "${arr[@]}"
+do
+  echo $i >> $file
+done
+
+nsh $file
+
+rm $file
+
+make -s clean
