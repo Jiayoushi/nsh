@@ -6,19 +6,6 @@ make -s
 
 if [ $? -ne 0 ];then exit 1; fi
 
-test1="cat -v <infile | grep foo | wc > outfile"
-test2="who | wc"
-test3="who | fgrep -i .edu > foo"
-test4="sort < foo | uniq -c >> bar"
-test5="ls"
-test6="who <hi | grep world | uniq <for <hi >>sweet | echo > file"
-test7="ls <hi -l dir2"
-test8="ls -a -b -c -d -e -f -g -h"
-test9="<hi ls >for -l -s dir2 -x | <hi >hi grep -l world | ls > out >out"
-test10=""
-test11="ls |"
-test12="|"
-
 declare -a arr=( "cat -v <infile | grep foo | wc > outfile"
                  "who | wc"
                  "who | fgrep -i .edu > foo"
@@ -30,11 +17,13 @@ declare -a arr=( "cat -v <infile | grep foo | wc > outfile"
                  "<hi ls >for -l -s dir2 -x | <hi >hi grep -l world | ls > out >out"
                  ""
                  "ls |"
-                 "|")
+                 "|"
+                 "who<file|wc>out|")
 
 function compare() {
  echo ---------------- $@ -------------------
  diff <(echo $@ | answer) <(echo $@ | nsh)
+ return $?
 }
 
 function memory_test() {
@@ -44,6 +33,7 @@ function memory_test() {
 for i in "${arr[@]}"
 do
   compare $i
+  if [[ $? -ne 0 ]]; then exit 1; fi
 done
 
 for i in "${arr[@]}"

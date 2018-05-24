@@ -22,15 +22,14 @@ int is_common_character(int character) {
   return !is_special_character(character) && character != '\0' && !isspace(character);
 }
 
-char *parse_redirection( char *character, struct job *job) {
-   char token = *character;
+char *parse_redirection( char *character, const char token, struct job *job) {
   if (token == '<') {
     job->input_redirect_mode = 1;
   } else {
     job->output_redirect_mode = 1;
   }
 
-  if (*(++character) == token) {
+  if (*character == token) {
     if (token == '<') {
       job->input_redirect_mode = 2;
     } else {
@@ -53,7 +52,7 @@ char *parse_redirection( char *character, struct job *job) {
   }
   redirect_filename[index] = '\0';
 
-  return character;
+  return character - 1;
 }
 
 char special_characters[] = "<>|";
@@ -82,10 +81,11 @@ char *parse_argv( char *character, struct process *process) {
     }    
 
     process->argv[index] = (char *)character; 
-    while (!isspace(*character) && !is_special_character(*character) && *character != '\0') {
+    while (is_common_character(*character)) {
       character++;
     }
     // Set boundary
+    // In the case of who|wc, the boundary is set in the parse function
     while (isspace(*character)) {
       *character++ = '\0';
     }  
@@ -96,6 +96,8 @@ char *parse_argv( char *character, struct process *process) {
   return character - 1;
 }
 
+// All sub-parse functions should return the character
+// it has parsed
 int parse( char *character, struct job *job) {
   if (strlen(character) <= 1) {
     return 0;
@@ -105,14 +107,17 @@ int parse( char *character, struct job *job) {
   while (*character != '\0') {
     switch (*character) {
       case '>': {
-        character = parse_redirection(character, job); 
+        *character = '\0';
+        character = parse_redirection(character + 1, '>', job); 
         break;
       }
       case '<': {
-        character = parse_redirection(character, job);
+        *character = '\0';
+        character = parse_redirection(character + 1, '<', job);
         break;
       }
       case '|': {
+        *character = '\0';
         process = handle_pipe(process, job);
         break;
       }

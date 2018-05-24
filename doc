@@ -1,0 +1,4 @@
+Allow meta-characters to appear without spaces around them, so "who|wc" works, rather than needing spaces
+like "who | wc". (You don’t get the marks if you end up using my parser from Part 1, of course.)
+
+
