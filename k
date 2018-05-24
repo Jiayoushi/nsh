@@ -21,13 +21,13 @@ declare -a arr=( "cat -v <infile | grep foo | wc > outfile"
                  "who<file|wc>out|")
 
 function compare() {
- echo ---------------- $@ -------------------
- diff <(echo $@ | answer) <(echo $@ | nsh)
- return $?
+  echo ---------------- $@ -------------------
+  diff <(echo $@ | answer) <(echo $@ | nsh)
+  return $?
 }
 
 function memory_test() {
- echo $@ | valgrind --leak-check=full --track-origins=yes nsh > /dev/null
+  echo $@ | valgrind --leak-check=full --track-origins=yes nsh > /dev/null
 }
 
 for i in "${arr[@]}"
