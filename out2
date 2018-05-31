@@ -1,4 +1,5 @@
 answer
+cat
 copy
 doc
 hand_over
@@ -17,68 +18,15 @@ TODO
 tst
 tst2
 xxx
-      1 achio    pts/30       2018-05-30 16:40 (dhcp-v037-025.mobile.uci.edu)
-      1 achio    pts/65       2018-05-30 16:57 (dhcp-v037-025.mobile.uci.edu)
-      1 achio    pts/66       2018-05-30 16:57 (dhcp-v037-025.mobile.uci.edu)
-      1 bmbakogu pts/63       2018-05-30 22:09 (vcv078043.vpn.uci.edu)
-      1 bsmorton pts/22       2018-05-26 17:33 (vcv072082.vpn.uci.edu)
-      1 etparson pts/53       2018-05-30 21:57 (dhcp-v036-110.mobile.uci.edu)
-      1 jiangag  pts/37       2018-05-30 18:34 (vcv074053.vpn.uci.edu)
-      1 jiangag  pts/39       2018-05-30 18:34 (vcv074053.vpn.uci.edu)
-      1 jiangag  pts/54       2018-05-30 20:53 (vcv074053.vpn.uci.edu)
-      1 jyshi    pts/59       2018-05-30 22:00 (vcv071196.vpn.uci.edu)
-      1 markad1  pts/42       2018-05-30 16:02 (dhcp-v064-102.mobile.uci.edu)
-      1 markad1  pts/46       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-      1 markad1  pts/56       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-      1 markad1  pts/57       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-      1 markad1  pts/58       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-      1 markad1  pts/60       2018-05-30 16:52 (dhcp-v064-102.mobile.uci.edu)
-      1 markad1  pts/62       2018-05-30 22:09 (dhcp-v064-102.mobile.uci.edu)
-      1 mshingan pts/35       2018-05-30 21:42 (vcv077086.vpn.uci.edu)
-      1 mshingan pts/48       2018-05-30 21:43 (vcv077086.vpn.uci.edu)
-      1 siyuew1  pts/51       2018-05-30 21:47 (andromeda-5.ics.uci.edu)
-      1 siyuew1  pts/55       2018-05-30 21:02 (andromeda-37.ics.uci.edu)
-      1 thonglt  pts/33       2018-05-30 21:07 (vcv069151.vpn.uci.edu)
-      1 thonglt  pts/47       2018-05-30 20:23 (vcv069151.vpn.uci.edu)
-      1 vipada   pts/1        2018-05-30 09:09 (goddess.ics.uci.edu)
-      1 vuqt1    pts/28       2018-05-29 10:59 (dhcp-007035.ics.uci.edu)
-      1 vuqt1    pts/8        2018-05-30 09:37 (dhcp-007035.ics.uci.edu)
-      1 wayne    pts/20       2018-05-24 14:50 (bayonet-01.ics.uci.edu)
-      1 wayne    pts/3        2018-05-17 15:06 (bayonet-06.ics.uci.edu)
-      1 wayne    pts/79       2018-05-30 13:42 (bayonet-06.ics.uci.edu)
-      1 zhongww3 pts/70       2018-05-30 17:13 (dhcp-v115-008.mobile.uci.edu)
-vipada   pts/1        2018-05-30 09:09 (goddess.ics.uci.edu)
-wayne    pts/3        2018-05-17 15:06 (bayonet-06.ics.uci.edu)
-vuqt1    pts/8        2018-05-30 09:37 (dhcp-007035.ics.uci.edu)
-wayne    pts/20       2018-05-24 14:50 (bayonet-01.ics.uci.edu)
-bsmorton pts/22       2018-05-26 17:33 (vcv072082.vpn.uci.edu)
-vuqt1    pts/28       2018-05-29 10:59 (dhcp-007035.ics.uci.edu)
-achio    pts/30       2018-05-30 16:40 (dhcp-v037-025.mobile.uci.edu)
-thonglt  pts/33       2018-05-30 21:07 (vcv069151.vpn.uci.edu)
-mshingan pts/35       2018-05-30 21:42 (vcv077086.vpn.uci.edu)
-jiangag  pts/37       2018-05-30 18:34 (vcv074053.vpn.uci.edu)
-jiangag  pts/39       2018-05-30 18:34 (vcv074053.vpn.uci.edu)
-markad1  pts/42       2018-05-30 16:02 (dhcp-v064-102.mobile.uci.edu)
-markad1  pts/46       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-thonglt  pts/47       2018-05-30 20:23 (vcv069151.vpn.uci.edu)
-mshingan pts/48       2018-05-30 21:43 (vcv077086.vpn.uci.edu)
-siyuew1  pts/51       2018-05-30 21:47 (andromeda-5.ics.uci.edu)
-etparson pts/53       2018-05-30 21:57 (dhcp-v036-110.mobile.uci.edu)
-jiangag  pts/54       2018-05-30 20:53 (vcv074053.vpn.uci.edu)
-siyuew1  pts/55       2018-05-30 21:02 (andromeda-37.ics.uci.edu)
-markad1  pts/56       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-markad1  pts/57       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-markad1  pts/58       2018-05-30 16:03 (dhcp-v064-102.mobile.uci.edu)
-jyshi    pts/59       2018-05-30 22:00 (vcv071196.vpn.uci.edu)
-markad1  pts/60       2018-05-30 16:52 (dhcp-v064-102.mobile.uci.edu)
-markad1  pts/62       2018-05-30 22:09 (dhcp-v064-102.mobile.uci.edu)
-bmbakogu pts/63       2018-05-30 22:09 (vcv078043.vpn.uci.edu)
-achio    pts/65       2018-05-30 16:57 (dhcp-v037-025.mobile.uci.edu)
-achio    pts/66       2018-05-30 16:57 (dhcp-v037-025.mobile.uci.edu)
-zhongww3 pts/70       2018-05-30 17:13 (dhcp-v115-008.mobile.uci.edu)
-wayne    pts/79       2018-05-30 13:42 (bayonet-06.ics.uci.edu)
+      1 joowons  pts/2        2018-05-31 00:08 (vcv069214.vpn.uci.edu)
+      1 jyshi    pts/1        2018-05-31 00:56 (vcv077145.vpn.uci.edu)
+      1 siyuew1  pts/6        2018-04-19 16:34 (andromeda-6.ics.uci.edu)
+jyshi    pts/1        2018-05-31 00:56 (vcv077145.vpn.uci.edu)
+joowons  pts/2        2018-05-31 00:08 (vcv069214.vpn.uci.edu)
+siyuew1  pts/6        2018-04-19 16:34 (andromeda-6.ics.uci.edu)
 answer
 bar
+cat
 copy
 doc
 foo
@@ -100,6 +48,7 @@ tst
 tst2
 answer
 bar
+cat
 copy
 doc
 foo
@@ -120,6 +69,7 @@ TODO
 tst
 tst2
 answer
+cat
 copy
 doc
 hand_over

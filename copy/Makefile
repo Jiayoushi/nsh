@@ -10,6 +10,5 @@ main.o: main.c parse.h
 parse.o: parse.c parse.h
 	$(CC) $(CFLAGS) -c parse.c
 
-
 clean: 
 	rm *.o nsh
