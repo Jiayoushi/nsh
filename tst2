@@ -6,10 +6,20 @@ make -s
 
 if [ $? -ne 0 ]; then make clean && exit 1; fi
 
-declare -a arr=(" ls # | wc -w"
-                " # ls ls # nice"
-                "ls | wc -w &"
-               )
+declare -a arr=("ls"
+                "who | fgrep -i .edu > foo"
+                "echo "xxx" > bar"
+                "sort < foo|uniq -c >>bar #somthing??&"
+                ">input ls"
+                "<input>output cat"
+                "cat bar"
+                "cat foo"
+                "cat input"
+                "cat output"
+                "rm bar #some comments"
+                "rm foo # >> something"
+                "rm input output #"
+                "ls")
 
 file="/tmp/ffffff"
 
@@ -18,7 +28,10 @@ do
   echo $i >> $file
 done
 
-nsh $file
+/bin/bash $file > out1
+nsh $file > out2
+
+diff out1 out2
 
 rm $file
 

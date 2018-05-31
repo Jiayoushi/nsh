@@ -30,17 +30,14 @@ char *parse_redirection( char *character, const char token, struct job *job) {
   }
 
   if (*character == token) {
-    if (token == '<') {
-      job->input_redirect_mode = 2;
-    } else {
-      job->output_redirect_mode = 2;
-    }
+    job->output_redirect_mode = 2;
     character++;
   }
 
   while(isspace(*character)) {
     character++;
   }
+ 
   
   char *redirect_filename = (token == '<') ? job->input_redirect_filename :
     job->output_redirect_filename;
@@ -87,7 +84,7 @@ char *parse_argv( char *character, struct process *process) {
     // Set boundary
     // In the case of who|wc, the boundary is set in the parse function
     while (isspace(*character)) {
-      *character++ = '\0';
+      character++;
     }  
   }
 
@@ -102,7 +99,8 @@ void parse_background_job(struct job *job) {
 
 // All sub-parse functions should return the character
 // it has parsed
-int parse(char *character, struct job *job) {
+int parse(char *command, struct job *job) {
+  char *character = command;  
   char *pound = strchr(character, '#');
   if (pound != NULL) {
     *pound = '\0';
@@ -116,22 +114,18 @@ int parse(char *character, struct job *job) {
   while (*character != '\0') {
     switch (*character) {
       case '>': {
-        *character = '\0';
         character = parse_redirection(character + 1, '>', job); 
         break;
       }
       case '<': {
-        *character = '\0';
         character = parse_redirection(character + 1, '<', job);
         break;
       }
       case '|': {
-        *character = '\0';
         process = parse_pipe(process, job);
         break;
       }
       case '&': {
-        *character = '\0';
         parse_background_job(job);
         break;
       }
@@ -144,7 +138,13 @@ int parse(char *character, struct job *job) {
     }
     character++;
   }
-
-
+ 
+  character = command;
+  for ( ; *character != '\0'; character++) {
+    if (!is_common_character(*character)) {
+      *character = '\0';
+    }
+  } 
+  
   return 0;
 }
