@@ -141,7 +141,6 @@ void wait_background_job(struct job *job) {
         perror("waitpid background job");
         exit(EXIT_FAILURE);
       } else if (result == process->process_id) {
-        printf("result %d == process_id %d\n", result, process->process_id);
         total_finished_process++;
         process->finished = TRUE;
       } else {
