@@ -13,46 +13,8 @@
 
 void print_prompt() {
   printf("%c ", PROMPT);
+  fflush(stdout);
 }
-
-void print_parse_result(struct job *job) {
-  printf("%d: ", job->total_process);
-  if (job->input_redirect_mode == 1) {
-    printf("<");
-  } else if (job->input_redirect_mode == 2) {
-    printf("<<");
-  }
-  if (job->input_redirect_mode != 0) {
-    printf("'%s' ", job->input_redirect_filename);
-  }
-
-  struct process *process = job->first_process;
-  for ( ; process != NULL; process = process->next_process) {
-    if (process != job->first_process) { 
-      printf("| ");
-    }
-
-    int index = 0;
-    // process->argv may be NULL
-    for ( ; process->argv != NULL && process->argv[index] != NULL; index++) {
-      printf("'%s' ", process->argv[index]);
-    }
-  }
-  
-  if (job->output_redirect_mode == 1) {
-    printf(">");
-  } else if (job->output_redirect_mode == 2) {
-    printf(">>");
-  }
-  if (job->output_redirect_mode != 0) {
-    printf("'%s'", job->output_redirect_filename);
-  }
-
-  printf("bg:%d", job->background);
-  printf("\n");
-}
-
-
 
 void execute_job(struct job *job) {
   if (job->total_process == 0) {
@@ -97,8 +59,6 @@ void execute_job(struct job *job) {
   for ( ; i < job->total_process; i++, process = process->next_process) {
     int pid = fork();
     if (pid == 0) {
-      process->process_id = getpid();
-
       if (i == 0) {
         if (input_file_descriptor != STDIN_FILENO) {
 					dup2(input_file_descriptor, STDIN_FILENO);
@@ -128,6 +88,7 @@ void execute_job(struct job *job) {
         exit(EXIT_FAILURE);
       }
     } else if (pid > 0) {
+      process->process_id = pid;
       if (i != 0) {
         close(pipes[i - 1][0]);
         close(pipes[i - 1][1]);
@@ -167,40 +128,57 @@ void cleanup_jobs(struct job *job) {
   }
 }
 
-void reap_jobs(struct job *first_job) {
-  struct job *job = first_job;
+void wait_background_job(struct job *job) {
+  struct process *process = job->first_process;
+  int total_finished_process = 0;
+  for ( ; process != NULL; process = process->next_process) {
+    if (process->finished == TRUE) {
+      total_finished_process++;
+      continue;
+    } else {
+      int result = 0;
+      if ((result = waitpid(process->process_id, NULL, WNOHANG)) == -1) {
+        perror("waitpid background job");
+        exit(EXIT_FAILURE);
+      } else if (result == process->process_id) {
+        printf("result %d == process_id %d\n", result, process->process_id);
+        total_finished_process++;
+        process->finished = TRUE;
+      } else {
+        return ;
+      }
+    }
+  }
+
+  if (total_finished_process == job->total_process) {
+    printf("reap background job %s\n", job->command);
+    job->finished = TRUE;
+  }
+}
+
+void wait_background_jobs(struct job *job) {
   for ( ; job != NULL; job = job->next_job) {
     if (job->finished == TRUE) {
       continue;
     }
-    
-    int total_finished_process = 0;
-    int option = (job->background == TRUE) ? WNOHANG : 0;
-		struct process *process = job->first_process;
-		for ( ; process != NULL; process = process->next_process) {
-      if (process->finished == FALSE) {
-        int result = 0;
-			  if ((result = waitpid(process->process_id, NULL, option)) == -1) {
-				  perror("waitpid");
-				  exit(EXIT_FAILURE);
-			  } else if (result == process->process_id) {
-          total_finished_process++;
-				  process->finished = TRUE;
-        } else {
-          if (option == 0) {
-            total_finished_process++;
-          } else {
-            // Not terminated yet for option WNOHANG
-          }
-        }
-      }
-		}
+    wait_background_job(job);
+  } 
+}
 
-    if (total_finished_process == job->total_process) {
-			job->finished = TRUE;
-    }
+void wait_foreground_job(struct job *job) {
+  if (job->background == TRUE || job->finished == TRUE) {
+    return ;
   }
-  // Print finished background job
+
+  struct process *process = job->first_process;
+  for ( ; process != NULL; process = process->next_process) {
+    if (waitpid(process->process_id, NULL, 0) == -1) {
+      perror("waitpid foreground job");
+      exit(EXIT_FAILURE);
+    }
+    process->finished = TRUE;
+  }
+  job->finished = TRUE;
 }
 
 int main(int argc, char *argv[]) {
@@ -233,7 +211,8 @@ int main(int argc, char *argv[]) {
     }
     parse(job->command, job);
     execute_job(job);
-    reap_jobs(first_job);
+    wait_foreground_job(job);
+    wait_background_jobs(first_job);
   }
 
   cleanup_jobs(first_job);

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 #define TRUE                  1
 #define PROMPT                '?'
@@ -51,15 +52,7 @@ void print_parse_result(struct job *job) {
   printf("\n");
 }
 
-void cleanup_job(struct job *job) {
-  struct process *process = job->first_process;
-  struct process *next_process = NULL;
-  for ( ; process != NULL; process = next_process) {
-    next_process = process->next_process;
-    free(process->argv);
-    free(process);
-  }
-}
+
 
 void execute_job(struct job *job) {
   if (job->total_process == 0) {
@@ -152,13 +145,62 @@ void execute_job(struct job *job) {
     close(output_file_descriptor);
   }
 
-  process = job->first_process;
-  for ( ; process != NULL; process = process->next_process) {
-    if (waitpid(process->process_id, NULL, NULL) == -1) {
-      perror("wait");
-      exit(EXIT_FAILURE);
+  
+}
+
+void cleanup_job(struct job *job) {
+  struct process *process = job->first_process;
+  struct process *next_process = NULL;
+  for ( ; process != NULL; process = next_process) {
+    next_process = process->next_process;
+    free(process->argv);
+    free(process);
+  }
+  free(job);
+}
+
+void cleanup_jobs(struct job *job) {
+  struct job *next_job = NULL;
+  for ( ; job != NULL; job = next_job) {
+    next_job = job->next_job;
+    cleanup_job(job);
+  }
+}
+
+void reap_jobs(struct job *first_job) {
+  struct job *job = first_job;
+  for ( ; job != NULL; job = job->next_job) {
+    if (job->finished == TRUE) {
+      continue;
+    }
+    
+    int total_finished_process = 0;
+    int option = (job->background == TRUE) ? WNOHANG : 0;
+		struct process *process = job->first_process;
+		for ( ; process != NULL; process = process->next_process) {
+      if (process->finished == FALSE) {
+        int result = 0;
+			  if ((result = waitpid(process->process_id, NULL, option)) == -1) {
+				  perror("waitpid");
+				  exit(EXIT_FAILURE);
+			  } else if (result == process->process_id) {
+          total_finished_process++;
+				  process->finished = TRUE;
+        } else {
+          if (option == 0) {
+            total_finished_process++;
+          } else {
+            // Not terminated yet for option WNOHANG
+          }
+        }
+      }
+		}
+
+    if (total_finished_process == job->total_process) {
+			job->finished = TRUE;
     }
   }
+  // Print finished background job
 }
 
 int main(int argc, char *argv[]) {
@@ -170,20 +212,31 @@ int main(int argc, char *argv[]) {
     } 
   }
 
+  struct job *job = NULL;
+  struct job *first_job = NULL;
   while (TRUE) {
     if (command_source == stdin) {
       print_prompt();
     }
-    // puts it here to ensure prompt is printed before read input
-    struct job job = (const struct job){NULL};
-    if (fgets(job.command, COMMAND_LENGTH_LIMIT, command_source) == NULL) {
+    
+    if (job == NULL) {
+      job = (struct job *)malloc(sizeof(struct job));
+      first_job = job;
+    } else {
+      job->next_job = (struct job *)malloc(sizeof(struct job));
+      job = job->next_job;
+    }
+    *job = (const struct job){NULL};
+
+    if (fgets(job->command, COMMAND_LENGTH_LIMIT, command_source) == NULL) {
       break;  
     }
-    parse(job.command, &job);
-    execute_job(&job);
-    cleanup_job(&job);
+    parse(job->command, job);
+    execute_job(job);
+    //reap_jobs(first_job);
   }
 
+  cleanup_jobs(first_job);
   fclose(command_source);
   return 0;
 }

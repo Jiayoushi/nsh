@@ -1,4 +1,5 @@
 answer
+cat
 copy
 doc
 hand_over
@@ -19,14 +20,13 @@ tst2
 xxx
       1 joowons  pts/2        2018-05-31 00:08 (vcv069214.vpn.uci.edu)
       1 jyshi    pts/1        2018-05-31 00:56 (vcv077145.vpn.uci.edu)
-      1 kaitlynf pts/3        2018-05-31 00:28 (dhcp-v034-053.mobile.uci.edu)
       1 siyuew1  pts/6        2018-04-19 16:34 (andromeda-6.ics.uci.edu)
 jyshi    pts/1        2018-05-31 00:56 (vcv077145.vpn.uci.edu)
 joowons  pts/2        2018-05-31 00:08 (vcv069214.vpn.uci.edu)
-kaitlynf pts/3        2018-05-31 00:28 (dhcp-v034-053.mobile.uci.edu)
 siyuew1  pts/6        2018-04-19 16:34 (andromeda-6.ics.uci.edu)
 answer
 bar
+cat
 copy
 doc
 foo
@@ -48,6 +48,7 @@ tst
 tst2
 answer
 bar
+cat
 copy
 doc
 foo
@@ -68,6 +69,7 @@ TODO
 tst
 tst2
 answer
+cat
 copy
 doc
 hand_over
