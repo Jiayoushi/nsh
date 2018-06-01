@@ -151,7 +151,7 @@ void wait_background_job(struct job *job) {
   }
 
   if (total_finished_process == job->total_process) {
-    printf("reap background job %s\n", job->command);
+    printf("[-] %d\n", job->first_process->process_id);
     job->finished = TRUE;
   }
 }
@@ -179,6 +179,14 @@ void wait_foreground_job(struct job *job) {
     process->finished = TRUE;
   }
   job->finished = TRUE;
+}
+
+void print_background_job(struct job *job) {
+  if (job->background != TRUE) {
+    return ;
+  }
+
+  printf("[+] %d\n", job->first_process->process_id);
 }
 
 int main(int argc, char *argv[]) {
@@ -211,6 +219,7 @@ int main(int argc, char *argv[]) {
     }
     parse(job->command, job);
     execute_job(job);
+    print_background_job(job);
     wait_foreground_job(job);
     wait_background_jobs(first_job);
   }

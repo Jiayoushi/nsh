@@ -18,6 +18,12 @@ struct process *parse_pipe(struct process* previous_process, struct job *job) {
   return new_process;
 }
 
+char special_characters[] = "<>|&";
+
+int is_special_character(int character) {
+  return strchr(special_characters, character) != NULL;
+}
+
 int is_common_character(int character) {
   return !is_special_character(character) && character != '\0' && !isspace(character);
 }
@@ -52,11 +58,7 @@ char *parse_redirection( char *character, const char token, struct job *job) {
   return character - 1;
 }
 
-char special_characters[] = "<>|&";
 
-int is_special_character(int character) {
-  return strchr(special_characters, character) != NULL;
-}
 
 char *parse_argv( char *character, struct process *process) {
   static int limit = 0;
