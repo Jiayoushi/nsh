@@ -17,7 +17,6 @@ declare -a arr=( "cat -v <infile | grep foo | wc > outfile"
                  "<hi ls >for -l -s dir2 -x | <hi >hi grep -l world | ls > out >out"
                  ""
                  "ls |"
-                 "|"
                  "who<file|wc>>out|")
 
 function compare() {

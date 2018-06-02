@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #define TRUE                  1
 #define PROMPT                '?'
@@ -14,6 +15,41 @@
 void print_prompt() {
   printf("%c ", PROMPT);
   fflush(stdout);
+}
+
+void print_parse_result(struct job *job) {
+  printf("%d: ", job->total_process);
+  if (job->input_redirect_mode == 1) {
+    printf("<");
+  } else if (job->input_redirect_mode == 2) {
+    printf("<<");
+  }
+  if (job->input_redirect_mode != 0) {
+    printf("'%s' ", job->input_redirect_filename);
+  }
+
+  struct process *process = job->first_process;
+  for ( ; process != NULL; process = process->next_process) {
+    if (process != job->first_process) { 
+      printf("| ");
+    }
+
+    int index = 0;
+    // process->argv may be NULL
+    for ( ; process->argv != NULL && process->argv[index] != NULL; index++) {
+      printf("'%s' ", process->argv[index]);
+    }
+  }
+  
+  if (job->output_redirect_mode == 1) {
+    printf(">");
+  } else if (job->output_redirect_mode == 2) {
+    printf(">>");
+  }
+  if (job->output_redirect_mode != 0) {
+    printf("'%s'", job->output_redirect_filename);
+  }
+  printf("\n");
 }
 
 void execute_job(struct job *job) {
@@ -216,8 +252,10 @@ int main(int argc, char *argv[]) {
     if (fgets(job->command, COMMAND_LENGTH_LIMIT, command_source) == NULL) {
       break;  
     }
+    *strchr(job->command, '\n') = '\0';
     parse(job->command, job);
     execute_job(job);
+    //print_parse_result(job);
     print_background_job(job);
     wait_foreground_job(job);
     wait_background_jobs(first_job);
