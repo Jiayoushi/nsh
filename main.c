@@ -52,9 +52,25 @@ void print_parse_result(struct job *job) {
   printf("\n");
 }
 
-void execute_job(struct job *job) {
+void execute_exit(struct job *job, struct job *last_job) {
+  if (job->first_process->argv[1] == NULL) {
+    if (last_job == NULL) {
+      exit(EXIT_SUCCESS);
+    } else {
+      exit(last_job->exit_status);
+    }
+  } else {
+    exit(atoi(job->first_process->argv[1]));
+  }
+}
+
+void execute_job(struct job *job, struct job *previous_job) {
   if (job->total_process == 0) {
     return;
+  }
+
+  if (strcmp(job->first_process->argv[0], "exit") == 0) {
+    execute_exit(job, previous_job);
   }
 
   int input_file_descriptor = STDIN_FILENO;
@@ -141,8 +157,6 @@ void execute_job(struct job *job) {
   if (output_file_descriptor != STDOUT_FILENO) {
     close(output_file_descriptor);
   }
-
-  
 }
 
 void cleanup_job(struct job *job) {
@@ -165,6 +179,7 @@ void cleanup_jobs(struct job *job) {
 }
 
 void wait_background_job(struct job *job) {
+  printf("wait background job\n");
   struct process *process = job->first_process;
   int total_finished_process = 0;
   for ( ; process != NULL; process = process->next_process) {
@@ -173,13 +188,21 @@ void wait_background_job(struct job *job) {
       continue;
     } else {
       int result = 0;
-      if ((result = waitpid(process->process_id, NULL, WNOHANG)) == -1) {
+      int status = 0;
+      if ((result = waitpid(process->process_id, &status, WNOHANG)) == -1) {
         perror("waitpid background job");
         exit(EXIT_FAILURE);
       } else if (result == process->process_id) {
         total_finished_process++;
         process->finished = TRUE;
+        if (WIFEXITED(status)) {
+          printf("set exit status\n");
+          job->exit_status = WEXITSTATUS(status);
+        } else {
+					printf("process %s did not exit normally, exit status is not recorded\n", process->argv[0]);
+        }
       } else {
+        printf("result %d\n", result);
         return ;
       }
     }
@@ -207,9 +230,15 @@ void wait_foreground_job(struct job *job) {
 
   struct process *process = job->first_process;
   for ( ; process != NULL; process = process->next_process) {
-    if (waitpid(process->process_id, NULL, 0) == -1) {
+    int status = 0;
+    if (waitpid(process->process_id, &status, 0) == -1) {
       perror("waitpid foreground job");
       exit(EXIT_FAILURE);
+    }
+    if (WIFEXITED(status)) {
+      job->exit_status = WEXITSTATUS(status); 
+    } else {
+      printf("process %s did not exit normally, exit status is not recorded\n", process->argv[0]);
     }
     process->finished = TRUE;
   }
@@ -235,7 +264,10 @@ int main(int argc, char *argv[]) {
 
   struct job *job = NULL;
   struct job *first_job = NULL;
+  struct job *previous_job = NULL;
   while (TRUE) {
+    wait_background_jobs(first_job);
+
     if (command_source == stdin) {
       print_prompt();
     }
@@ -254,11 +286,11 @@ int main(int argc, char *argv[]) {
     }
     *strchr(job->command, '\n') = '\0';
     parse(job->command, job);
-    execute_job(job);
+    execute_job(job, previous_job);
     //print_parse_result(job);
     print_background_job(job);
     wait_foreground_job(job);
-    wait_background_jobs(first_job);
+    previous_job = job;
   }
 
   cleanup_jobs(first_job);

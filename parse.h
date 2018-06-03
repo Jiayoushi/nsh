@@ -19,6 +19,7 @@ struct job {
   int total_process;
   int finished;
   int background;
+  int exit_status;
   char command[COMMAND_LENGTH_LIMIT]; // TODO: Should be changed later for dynamic length
   int input_redirect_mode;        // 0 for non, 1 for <, 2 for <<
   int output_redirect_mode;       
