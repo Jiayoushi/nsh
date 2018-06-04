@@ -1,12 +1,11 @@
-\
 answer
 a.out
+imp
 infile
 k.c
 main.c
 main.o
 Makefile
-||n
 nsh
 out1
 out2
@@ -16,48 +15,142 @@ parse.h
 parse.o
 README.md
 test.c
+test_script
 TODO
 tst
 tst2
 x.c
 < >||n
 xxx
-      1 bmbakogu pts/24       2018-06-02 04:38 (vcv073241.vpn.uci.edu)
+      1 aibragan pts/157      2018-06-03 21:43 (vcv074201.vpn.uci.edu)
+      1 aibragan pts/158      2018-06-03 21:43 (vcv074201.vpn.uci.edu)
+      1 aibragan pts/46       2018-06-03 22:56 (vcv074201.vpn.uci.edu)
+      1 aibragan pts/54       2018-06-03 22:51 (vcv074201.vpn.uci.edu)
+      1 aibragan pts/60       2018-06-03 22:51 (vcv074201.vpn.uci.edu)
+      1 ajgu     pts/147      2018-06-03 22:18 (vcv070003.vpn.uci.edu)
+      1 andrenl  pts/106      2018-06-03 22:20 (vcv070100.vpn.uci.edu)
+      1 andrez   pts/48       2018-06-03 22:17 (vcv073239.vpn.uci.edu)
+      1 arceap   pts/151      2018-06-03 21:42 (vcv064107.vpn.uci.edu)
+      1 asifm    pts/111      2018-06-03 17:43 (vcv079197.vpn.uci.edu)
       1 bsmorton pts/22       2018-05-26 17:33 (vcv072082.vpn.uci.edu)
+      1 derektv  pts/114      2018-06-03 13:56 (gray-wolf.ics.uci.edu)
+      1 derektv  pts/35       2018-06-03 22:03 (vcv071135.vpn.uci.edu)
+      1 forsterj pts/130      2018-06-03 19:10 (vcv074003.vpn.uci.edu)
+      1 galiciaj pts/112      2018-06-03 15:38 (vcv078108.vpn.uci.edu)
+      1 gmolitor pts/37       2018-06-03 22:50 (vcv064111.vpn.uci.edu)
+      1 gonzaa12 pts/102      2018-06-03 18:01 (vcv079244.vpn.uci.edu)
+      1 gonzaa12 pts/126      2018-06-03 16:53 (vcv079244.vpn.uci.edu)
+      1 hans     pts/58       2018-06-03 00:13 (medusa.ics.uci.edu)
       1 hans     pts/96       2018-06-01 15:37 (medusa.ics.uci.edu)
-      1 jyshi    pts/25       2018-06-02 05:25 (vcv074107.vpn.uci.edu)
-      1 psilvado pts/78       2018-06-01 23:01 (dhcp-v208-074.vp.reshsg.uci.edu)
+      1 huymp    pts/81       2018-06-03 18:45 (vcv071099.vpn.uci.edu)
+      1 huymp    pts/91       2018-06-03 20:03 (vcv071099.vpn.uci.edu)
+      1 ivanwl   pts/139      2018-06-03 16:10 (vcv064108.vpn.uci.edu)
+      1 ivle     pts/77       2018-06-03 20:18 (vcv074008.vpn.uci.edu)
+      1 jchau9   pts/101      2018-06-03 22:09 (vcv074235.vpn.uci.edu)
+      1 jiangag  pts/51       2018-06-03 10:49 (vcv071105.vpn.uci.edu)
+      1 jiangag  pts/53       2018-06-03 10:49 (vcv071105.vpn.uci.edu)
+      1 jmadrig3 pts/103      2018-06-03 20:40 (vcv069242.vpn.uci.edu)
+      1 jslewis1 pts/44       2018-06-03 23:10 (vcv077007.vpn.uci.edu)
+      1 jslewis1 pts/66       2018-06-03 23:19 (vcv077007.vpn.uci.edu)
+      1 jyshi    pts/123      2018-06-03 19:43 (vcv071139.vpn.uci.edu)
+      1 jyshi    pts/80       2018-06-03 20:49 (vcv071139.vpn.uci.edu)
+      1 kaigew   pts/100      2018-06-03 20:08 (vcv075080.vpn.uci.edu)
+      1 kaigew   pts/128      2018-06-03 22:10 (vcv075080.vpn.uci.edu)
+      1 kennytn5 pts/145      2018-06-03 20:59 (vcv070087.vpn.uci.edu)
+      1 khauvi   pts/138      2018-06-03 22:35 (vcv074240.vpn.uci.edu)
+      1 mcai3    pts/155      2018-06-03 21:36 (vcv070007.vpn.uci.edu)
+      1 mcai3    pts/25       2018-06-03 20:49 (vcv070007.vpn.uci.edu)
+      1 msanjaq  pts/113      2018-06-03 18:47 (vcv064126.vpn.uci.edu)
+      1 msanjaq  pts/146      2018-06-03 22:38 (vcv064126.vpn.uci.edu)
+      1 nkdang1  pts/105      2018-06-03 22:29 (vcv071120.vpn.uci.edu)
+      1 root     pts/24       2018-06-02 14:31 (kate-beckett-v3.ics.uci.edu)
+      1 trandh2  pts/73       2018-06-03 23:23 (vcv075029.vpn.uci.edu)
+      1 trandh2  pts/78       2018-06-03 23:24 (vcv075029.vpn.uci.edu)
+      1 tunghn1  pts/98       2018-06-03 16:50 (vcv078089.vpn.uci.edu)
+      1 vincevt1 pts/148      2018-06-03 22:24 (vcv079037.vpn.uci.edu)
       1 vipada   pts/1        2018-05-30 09:09 (goddess.ics.uci.edu)
+      1 vlu4     pts/59       2018-06-03 22:36 (vcv074006.vpn.uci.edu)
       1 vuqt1    pts/28       2018-05-29 10:59 (dhcp-007035.ics.uci.edu)
       1 vuqt1    pts/8        2018-05-30 09:37 (dhcp-007035.ics.uci.edu)
-      1 wayne    pts/3        2018-05-31 15:32 (bayonet-06.ics.uci.edu)
-      1 wayne    pts/55       2018-05-31 14:42 (bayonet-01.ics.uci.edu)
+      1 wayne    pts/30       2018-06-03 08:53 (bayonet-01.ics.uci.edu)
+      1 wayne    pts/67       2018-06-02 16:20 (bayonet-06.ics.uci.edu)
       1 wayne    pts/79       2018-05-30 13:42 (bayonet-06.ics.uci.edu)
-      1 wayne    pts/85       2018-05-31 15:19 (bayonet-01.ics.uci.edu)
+      1 wayne    pts/89       2018-06-03 11:56 (bayonet-02.ics.uci.edu)
+      1 wcwu1    pts/153      2018-06-03 21:47 (vcv070137.vpn.uci.edu)
+      1 wdcohen  pts/3        2018-06-02 14:34 (kate-beckett-v3.ics.uci.edu)
+      1 wlyles   pts/108      2018-06-03 22:10 (vcv074112.vpn.uci.edu)
+      1 xuc11    pts/65       2018-06-03 21:59 (dhcp-v093-034.mobile.uci.edu)
+      1 yanjl    pts/87       2018-06-03 21:40 (vcv074234.vpn.uci.edu)
 vipada   pts/1        2018-05-30 09:09 (goddess.ics.uci.edu)
-wayne    pts/3        2018-05-31 15:32 (bayonet-06.ics.uci.edu)
+wdcohen  pts/3        2018-06-02 14:34 (kate-beckett-v3.ics.uci.edu)
 vuqt1    pts/8        2018-05-30 09:37 (dhcp-007035.ics.uci.edu)
 bsmorton pts/22       2018-05-26 17:33 (vcv072082.vpn.uci.edu)
-bmbakogu pts/24       2018-06-02 04:38 (vcv073241.vpn.uci.edu)
-jyshi    pts/25       2018-06-02 05:25 (vcv074107.vpn.uci.edu)
+root     pts/24       2018-06-02 14:31 (kate-beckett-v3.ics.uci.edu)
+mcai3    pts/25       2018-06-03 20:49 (vcv070007.vpn.uci.edu)
 vuqt1    pts/28       2018-05-29 10:59 (dhcp-007035.ics.uci.edu)
-wayne    pts/55       2018-05-31 14:42 (bayonet-01.ics.uci.edu)
-psilvado pts/78       2018-06-01 23:01 (dhcp-v208-074.vp.reshsg.uci.edu)
+wayne    pts/30       2018-06-03 08:53 (bayonet-01.ics.uci.edu)
+derektv  pts/35       2018-06-03 22:03 (vcv071135.vpn.uci.edu)
+gmolitor pts/37       2018-06-03 22:50 (vcv064111.vpn.uci.edu)
+jslewis1 pts/44       2018-06-03 23:10 (vcv077007.vpn.uci.edu)
+aibragan pts/46       2018-06-03 22:56 (vcv074201.vpn.uci.edu)
+andrez   pts/48       2018-06-03 22:17 (vcv073239.vpn.uci.edu)
+jiangag  pts/51       2018-06-03 10:49 (vcv071105.vpn.uci.edu)
+jiangag  pts/53       2018-06-03 10:49 (vcv071105.vpn.uci.edu)
+aibragan pts/54       2018-06-03 22:51 (vcv074201.vpn.uci.edu)
+hans     pts/58       2018-06-03 00:13 (medusa.ics.uci.edu)
+vlu4     pts/59       2018-06-03 22:36 (vcv074006.vpn.uci.edu)
+aibragan pts/60       2018-06-03 22:51 (vcv074201.vpn.uci.edu)
+xuc11    pts/65       2018-06-03 21:59 (dhcp-v093-034.mobile.uci.edu)
+jslewis1 pts/66       2018-06-03 23:19 (vcv077007.vpn.uci.edu)
+wayne    pts/67       2018-06-02 16:20 (bayonet-06.ics.uci.edu)
+trandh2  pts/73       2018-06-03 23:23 (vcv075029.vpn.uci.edu)
+ivle     pts/77       2018-06-03 20:18 (vcv074008.vpn.uci.edu)
+trandh2  pts/78       2018-06-03 23:24 (vcv075029.vpn.uci.edu)
 wayne    pts/79       2018-05-30 13:42 (bayonet-06.ics.uci.edu)
-wayne    pts/85       2018-05-31 15:19 (bayonet-01.ics.uci.edu)
+jyshi    pts/80       2018-06-03 20:49 (vcv071139.vpn.uci.edu)
+huymp    pts/81       2018-06-03 18:45 (vcv071099.vpn.uci.edu)
+yanjl    pts/87       2018-06-03 21:40 (vcv074234.vpn.uci.edu)
+wayne    pts/89       2018-06-03 11:56 (bayonet-02.ics.uci.edu)
+huymp    pts/91       2018-06-03 20:03 (vcv071099.vpn.uci.edu)
 hans     pts/96       2018-06-01 15:37 (medusa.ics.uci.edu)
-\
+tunghn1  pts/98       2018-06-03 16:50 (vcv078089.vpn.uci.edu)
+kaigew   pts/100      2018-06-03 20:08 (vcv075080.vpn.uci.edu)
+jchau9   pts/101      2018-06-03 22:09 (vcv074235.vpn.uci.edu)
+gonzaa12 pts/102      2018-06-03 18:01 (vcv079244.vpn.uci.edu)
+jmadrig3 pts/103      2018-06-03 20:40 (vcv069242.vpn.uci.edu)
+nkdang1  pts/105      2018-06-03 22:29 (vcv071120.vpn.uci.edu)
+andrenl  pts/106      2018-06-03 22:20 (vcv070100.vpn.uci.edu)
+wlyles   pts/108      2018-06-03 22:10 (vcv074112.vpn.uci.edu)
+asifm    pts/111      2018-06-03 17:43 (vcv079197.vpn.uci.edu)
+galiciaj pts/112      2018-06-03 15:38 (vcv078108.vpn.uci.edu)
+msanjaq  pts/113      2018-06-03 18:47 (vcv064126.vpn.uci.edu)
+derektv  pts/114      2018-06-03 13:56 (gray-wolf.ics.uci.edu)
+jyshi    pts/123      2018-06-03 19:43 (vcv071139.vpn.uci.edu)
+gonzaa12 pts/126      2018-06-03 16:53 (vcv079244.vpn.uci.edu)
+forsterj pts/130      2018-06-03 19:10 (vcv074003.vpn.uci.edu)
+khauvi   pts/138      2018-06-03 22:35 (vcv074240.vpn.uci.edu)
+ivanwl   pts/139      2018-06-03 16:10 (vcv064108.vpn.uci.edu)
+kaigew   pts/128      2018-06-03 22:10 (vcv075080.vpn.uci.edu)
+kennytn5 pts/145      2018-06-03 20:59 (vcv070087.vpn.uci.edu)
+msanjaq  pts/146      2018-06-03 22:38 (vcv064126.vpn.uci.edu)
+ajgu     pts/147      2018-06-03 22:18 (vcv070003.vpn.uci.edu)
+vincevt1 pts/148      2018-06-03 22:24 (vcv079037.vpn.uci.edu)
+arceap   pts/151      2018-06-03 21:42 (vcv064107.vpn.uci.edu)
+wcwu1    pts/153      2018-06-03 21:47 (vcv070137.vpn.uci.edu)
+mcai3    pts/155      2018-06-03 21:36 (vcv070007.vpn.uci.edu)
+aibragan pts/157      2018-06-03 21:43 (vcv074201.vpn.uci.edu)
+aibragan pts/158      2018-06-03 21:43 (vcv074201.vpn.uci.edu)
 answer
 a.out
 bar
 foo
+imp
 infile
 input
 k.c
 main.c
 main.o
 Makefile
-||n
 nsh
 out1
 out2
@@ -67,22 +160,22 @@ parse.h
 parse.o
 README.md
 test.c
+test_script
 TODO
 tst
 tst2
 x.c
-\
 answer
 a.out
 bar
 foo
+imp
 infile
 input
 k.c
 main.c
 main.o
 Makefile
-||n
 nsh
 out1
 out2
@@ -92,19 +185,19 @@ parse.h
 parse.o
 README.md
 test.c
+test_script
 TODO
 tst
 tst2
 x.c
-\
 answer
 a.out
+imp
 infile
 k.c
 main.c
 main.o
 Makefile
-||n
 nsh
 out1
 out2
@@ -114,6 +207,7 @@ parse.h
 parse.o
 README.md
 test.c
+test_script
 TODO
 tst
 tst2
