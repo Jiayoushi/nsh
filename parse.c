@@ -60,7 +60,7 @@ char *parse_redirection( char *character, const char token, struct job *job) {
 
 
 
-char *parse_argv( char *character, struct process *process) {
+char *parse_argv(char *character, struct process *process) {
   static int limit = 0;
   int index = 0;
   if (process->argv == NULL) {
@@ -78,20 +78,37 @@ char *parse_argv( char *character, struct process *process) {
       process->argv = (char **)realloc(process->argv, sizeof(char *) * limit * 2);
       limit *= 2;
     }    
-
-    process->argv[index] = (char *)character; 
-    while (is_common_character(*character)) {
-      if (*character == '\\') {
-        char *c = character;
+    
+    
+		process->argv[index] = (char *)character; 
+		while (is_common_character(*character)) {
+			if (*character == '\\') {
+				char *c = character;
+				while (*c != '\0') {
+					*c = *(c + 1);
+					c++;
+				}
+				character++;
+			} else if (*character == '\'') {
+				// 'abc def g 'xxx'zzb cc'\0
+				char *c = character;
         while (*c != '\0') {
           *c = *(c + 1);
           c++;
         }
-        character++;
-      } else {
-        character++;
-      }
-    }
+        // abc def g 'xxx'zzb cc'\0
+        c = strchr(character, '\'');
+        character = c;
+        while (*c != '\0') {
+          *c = *(c + 1);
+          c++;
+        }
+        // abc def g xxx'zzb cc'\0
+			} else {
+				character++;
+			}
+		}
+    
 
     // Set boundary
     // In the case of who|wc, the boundary is set in the parse function
