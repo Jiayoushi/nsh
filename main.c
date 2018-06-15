@@ -11,56 +11,62 @@
 #define TRUE                  1
 #define PROMPT                '?'
 
+struct job *first_job = NULL;
 
 void print_prompt() {
   printf("%c ", PROMPT);
   fflush(stdout);
 }
 
-void print_parse_result(struct job *job) {
-  printf("%d: ", job->total_process);
-  if (job->input_redirect_mode == 1) {
-    printf("<");
-  } else if (job->input_redirect_mode == 2) {
-    printf("<<");
-  }
-  if (job->input_redirect_mode != 0) {
-    printf("'%s' ", job->input_redirect_filename);
-  }
-
+void cleanup_job(struct job *job) {
   struct process *process = job->first_process;
-  for ( ; process != NULL; process = process->next_process) {
-    if (process != job->first_process) { 
-      printf("| ");
-    }
-
+  struct process *next_process = NULL;
+  for ( ; process != NULL; process = next_process) {
+    next_process = process->next_process;
     int index = 0;
-    // process->argv may be NULL
-    for ( ; process->argv != NULL && process->argv[index] != NULL; index++) {
-      printf("'%s' ", process->argv[index]);
+    for ( ; process->argv[index] != NULL; index++) {
+      free(process->argv[index]);
     }
+    free(process);
   }
-  
-  if (job->output_redirect_mode == 1) {
-    printf(">");
-  } else if (job->output_redirect_mode == 2) {
-    printf(">>");
+  free(job);
+}
+
+void cleanup_jobs() {
+  struct job *job = first_job;
+  struct job *next_job = NULL;
+  for ( ; job != NULL; job = next_job) {
+    next_job = job->next_job;
+    cleanup_job(job);
   }
-  if (job->output_redirect_mode != 0) {
-    printf("'%s'", job->output_redirect_filename);
-  }
-  printf("\n");
 }
 
 void execute_exit(struct job *job, struct job *last_job) {
+  int exit_status = 0;
   if (job->first_process->argv[1] == NULL) {
     if (last_job == NULL) {
-      exit(EXIT_SUCCESS);
+      exit_status = EXIT_SUCCESS;
     } else {
-      exit(last_job->exit_status);
+      exit_status = last_job->exit_status;
     }
   } else {
-    exit(atoi(job->first_process->argv[1]));
+    if (job->first_process->argv[2] != NULL) {
+      fprintf(stderr, "Usage: exit [status]\n");
+      job->exit_status = 1;
+      job->finished = TRUE;
+      return ;
+    }
+    exit_status = atoi(job->first_process->argv[1]);
+  }
+
+  cleanup_jobs();
+  exit(exit_status);
+}
+
+void execute_cd(struct job *job) {
+  if (chdir(job->first_process->argv[1]) == -1) {
+    perror("chdir");
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -71,6 +77,10 @@ void execute_job(struct job *job, struct job *previous_job) {
 
   if (strcmp(job->first_process->argv[0], "exit") == 0) {
     execute_exit(job, previous_job);
+    return ;
+  } else if (strcmp(job->first_process->argv[0], "cd") == 0) {
+    execute_cd(job);
+    return ;
   }
 
   int input_file_descriptor = STDIN_FILENO;
@@ -159,27 +169,9 @@ void execute_job(struct job *job, struct job *previous_job) {
   }
 }
 
-void cleanup_job(struct job *job) {
-  struct process *process = job->first_process;
-  struct process *next_process = NULL;
-  for ( ; process != NULL; process = next_process) {
-    next_process = process->next_process;
-    free(process->argv);
-    free(process);
-  }
-  free(job);
-}
 
-void cleanup_jobs(struct job *job) {
-  struct job *next_job = NULL;
-  for ( ; job != NULL; job = next_job) {
-    next_job = job->next_job;
-    cleanup_job(job);
-  }
-}
 
 void wait_background_job(struct job *job) {
-  printf("wait background job\n");
   struct process *process = job->first_process;
   int total_finished_process = 0;
   for ( ; process != NULL; process = process->next_process) {
@@ -196,27 +188,25 @@ void wait_background_job(struct job *job) {
         total_finished_process++;
         process->finished = TRUE;
         if (WIFEXITED(status)) {
-          printf("set exit status\n");
           job->exit_status = WEXITSTATUS(status);
         } else {
 					printf("process %s did not exit normally, exit status is not recorded\n", process->argv[0]);
         }
       } else {
-        printf("result %d\n", result);
         return ;
       }
     }
   }
 
   if (total_finished_process == job->total_process) {
-    printf("[-] %d\n", job->first_process->process_id);
+    //print("[-] %d\n", job->first_process->process_id);
     job->finished = TRUE;
   }
 }
 
 void wait_background_jobs(struct job *job) {
   for ( ; job != NULL; job = job->next_job) {
-    if (job->finished == TRUE) {
+    if (job->finished == TRUE || job->background == FALSE) {
       continue;
     }
     wait_background_job(job);
@@ -231,7 +221,9 @@ void wait_foreground_job(struct job *job) {
   struct process *process = job->first_process;
   for ( ; process != NULL; process = process->next_process) {
     int status = 0;
-    if (waitpid(process->process_id, &status, 0) == -1) {
+    if (process->process_id == 0) {
+      // Built-in command, no process id
+    } else if (waitpid(process->process_id, &status, 0) == -1) {
       perror("waitpid foreground job");
       exit(EXIT_FAILURE);
     }
@@ -253,47 +245,59 @@ void print_background_job(struct job *job) {
   printf("[+] %d\n", job->first_process->process_id);
 }
 
-int main(int argc, char *argv[]) {
-  FILE *command_source = stdin;
-  if (argc > 1) {
-    if ((command_source = fopen(argv[1], "r")) == NULL) {
-      perror(argv[1]);
-      exit(EXIT_FAILURE);
-    } 
+struct job * allocate_job(struct job *job, struct job **first_job) {
+  if (job == NULL) {
+    job = (struct job *)malloc(sizeof(struct job));
+    *first_job = job;
+  } else {
+    job->next_job = (struct job *)malloc(sizeof(struct job));
+    job = job->next_job;
   }
+  *job = (const struct job){NULL};
+  return job;
+}
+
+void setup_input_source(int argc, char *argv[]) {
+  if (argc == 2) {
+    int input_source = 0;
+    if ((input_source = open(argv[1], O_RDONLY, NULL)) == -1) {
+      perror("open");
+      exit(EXIT_FAILURE);
+    }
+    if (dup2(input_source, STDIN_FILENO) == -1) {
+      perror("dup2");
+      exit(EXIT_FAILURE);
+    }
+    if (close(input_source) == -1) {
+      perror("close");
+      exit(EXIT_FAILURE);
+    }
+  }
+}
+
+int main(int argc, char *argv[]) {
+  setup_input_source(argc, argv); 
 
   struct job *job = NULL;
-  struct job *first_job = NULL;
   struct job *previous_job = NULL;
   while (TRUE) {
-    wait_background_jobs(first_job);
-
-    if (command_source == stdin) {
+    if (argc == 1) {
       print_prompt();
     }
-    
-    if (job == NULL) {
-      job = (struct job *)malloc(sizeof(struct job));
-      first_job = job;
-    } else {
-      job->next_job = (struct job *)malloc(sizeof(struct job));
-      job = job->next_job;
-    }
-    *job = (const struct job){NULL};
 
-    if (fgets(job->command, COMMAND_LENGTH_LIMIT, command_source) == NULL) {
-      break;  
-    }
-    *strchr(job->command, '\n') = '\0';
-    parse(job->command, job);
+    job = allocate_job(job, &first_job);
+    int status = 0;
+    if ((status = parse(job, previous_job)) == 1) {
+      break;
+    } 
+    
     execute_job(job, previous_job);
-    //print_parse_result(job);
-    print_background_job(job);
+    //print_background_job(job);
     wait_foreground_job(job);
+    wait_background_jobs(first_job);   
     previous_job = job;
   }
-
+ 
   cleanup_jobs(first_job);
-  fclose(command_source);
   return 0;
 }
