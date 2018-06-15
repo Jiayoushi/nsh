@@ -1,7 +1,6 @@
 # nsh
 
-make
-./nsh
-
+make <br />
+./nsh <br />
 
 
