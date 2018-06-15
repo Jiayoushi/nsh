@@ -275,7 +275,6 @@ void setup_input_source(int argc, char *argv[]) {
 
 int run_shell(int argc, char *argv[]) {
   setup_input_source(argc, argv); 
-
   struct job *job = NULL;
   struct job *previous_job = NULL;
   while (TRUE) {

@@ -1,1 +1,7 @@
 # nsh
+
+make
+./nsh
+
+
+
