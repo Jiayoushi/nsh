@@ -50,6 +50,12 @@ void execute_exit(struct job *job, struct job *last_job) {
       exit_status = last_job->exit_status;
     }
   } else {
+    if (job->first_process->argv[2] != NULL) {
+      fprintf(stderr, "Usage: exit [status]\n");
+      job->exit_status = 1;
+      job->finished = TRUE;
+      return ;
+    }
     exit_status = atoi(job->first_process->argv[1]);
   }
 
@@ -71,6 +77,7 @@ void execute_job(struct job *job, struct job *previous_job) {
 
   if (strcmp(job->first_process->argv[0], "exit") == 0) {
     execute_exit(job, previous_job);
+    return ;
   } else if (strcmp(job->first_process->argv[0], "cd") == 0) {
     execute_cd(job);
     return ;

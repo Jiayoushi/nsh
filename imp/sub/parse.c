@@ -32,6 +32,7 @@ void ungetc_wrapper(int character) {
 void unget_string(char *string, int length) {
   int index = length - 1;
   for ( ;index >= 0; index--) {
+    printf("unget %c;\n", string[index]);
     ungetc_wrapper(string[index]);
   }
 }
@@ -77,12 +78,14 @@ char *get_word() {
   }
 }
 
-void parse_argv(struct process *process) {
+// parsed_word is optional, it will be used if it's supplied.
+// otherwise, get the next word
+void parse_argv(struct process *process, char *parsed_word) {
   int index = 0;
   while (process->argv[index] != NULL) {
     index++;
   }
-  const char *word = get_word();
+  const char *word = parsed_word == NULL ? get_word() : parsed_word;
   process->argv[index] = (char *)malloc(sizeof(char) * strlen(word) + 1);
   strcpy(process->argv[index], word);
   
@@ -124,24 +127,26 @@ void parse_background_job(struct job *job) {
 }
 
 // Substitute $? with the exit status of previous_job
-void substitution(struct job *previous_job) {
+char *substitution(struct job *previous_job) {
+  static char value[256];
   char character = getchar();
   switch (character) {
     case '?': {
-      int exit_status = previous_job == NULL ? 0 : previous_job->exit_status;
-      char number[8];
+      int exit_status = 0;
+      if (previous_job != NULL) {
+        exit_status = previous_job->exit_status;
+      }
       int length = 0;
-      if ((length = sprintf(number, "%d", exit_status)) < 0) {
+      if ((length = sprintf(value, "%d", exit_status)) < 0) {
         perror("sprintf");
         exit(EXIT_FAILURE);
       }
-      unget_string(number, length);
-      break;
+      return value;
     }
     default: {
       ungetc_wrapper(character);
       ungetc_wrapper('$');
-      break;
+      return NULL;
     }
   }
 }
@@ -176,8 +181,7 @@ int parse(struct job *job, struct job *previous_job) {
         break;
       }
       case '$': {
-        substitution(previous_job);
-        parse_argv(process);
+        parse_argv(process, substitution(previous_job));
         break;
       }
       default: {
@@ -194,7 +198,7 @@ int parse(struct job *job, struct job *previous_job) {
           process = job->first_process;
         }
 
-        parse_argv(process); 
+        parse_argv(process, NULL); 
         break;
       }
     }
