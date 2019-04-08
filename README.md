@@ -9,7 +9,11 @@ make
 ## Usage
 ```
 ./xsh
+```
 
+## Example
+```
+./xsh
 ? cat main.c | wc -w > temp
 ? cat temp
 14
