@@ -1,4 +1,4 @@
-# nsh
+# xsh
 A simple shell written in C that supports redirection, pipe, background job, comments.
 
 ## Installation
