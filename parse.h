@@ -1,11 +1,11 @@
 #include <sys/types.h>
 
 #define COMMAND_LENGTH_LIMIT  1024
-#define MAX_FILENAME_LENGTH        255
-#define DEFAULT_ARGV_SIZE            2
-#define TRUE                         1
-#define FALSE                        0
-#define MAX_ARGUMENTS          32
+#define MAX_FILENAME_LENGTH    255
+#define DEFAULT_ARGV_SIZE        2
+#define TRUE                     1
+#define FALSE                    0
+#define MAX_ARGUMENTS           32
 #define MAX_ARGUMENT_LENGTH    255
 
 struct process {
