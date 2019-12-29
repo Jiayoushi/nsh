@@ -188,7 +188,7 @@ void wait_background_job(struct job *job) {
         if (WIFEXITED(status)) {
           job->exit_status = WEXITSTATUS(status);
         } else {
-					printf("process %s did not exit normally, exit status is not recorded\n", process->argv[0]);
+	  printf("process %s did not exit normally, exit status is not recorded\n", process->argv[0]);
         }
       } else {
         return ;
